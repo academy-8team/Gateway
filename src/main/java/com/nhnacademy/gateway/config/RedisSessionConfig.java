@@ -1,6 +1,6 @@
 /**
  * packageName :  com.nhnacademy.gateway.config
- * fileName : RestTemplateConfig
+ * fileName : RedisSessionConfig
  * author :  ichunghui
  * date : 2023/06/13 
  * description :
@@ -14,14 +14,15 @@ package com.nhnacademy.gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 @Configuration
-public class RestTemplateConfig {
+@EnableRedisHttpSession
+public class RedisSessionConfig {
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public LettuceConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory();
     }
 }
-
