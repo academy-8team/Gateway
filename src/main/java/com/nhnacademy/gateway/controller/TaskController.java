@@ -55,17 +55,10 @@ public class TaskController {
 
         List<Comment> comments = commentService.getCommentList(projectNum, taskNum);
 
-        //
+
         List<String> taskTagsTitle = taskTagService.getTaskTagList(projectNum, taskNum);
 
         String milestoneTitle = milestoneService.getMilestoneInTask(projectNum, taskNum);
-
-
-        // Milestone milestone = milestoneService.getMilestoneInTask(projectNum, taskNum);
-
-//        if (task.getTaskNum() == null) {
-//            throw new NotFoundProjectException("해당 프로젝트가 존재하지 않습니다.");
-//        }
 
         model.addAttribute("projectNum", projectNum);
         model.addAttribute("task", task);

@@ -4,7 +4,7 @@ public enum MemberState {
     MEMBER_MEMBERSHIP {
         @Override
         public String toString() {
-            return "MEMBER_MEMBERSHIP";
+            return "MEBER_MEMBERSHIP";
         }
     }, MEMBER_WITHDRAW {
         @Override

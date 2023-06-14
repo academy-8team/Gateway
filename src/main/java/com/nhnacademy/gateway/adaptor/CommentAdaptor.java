@@ -6,7 +6,8 @@ import com.nhnacademy.gateway.dto.request.CommentRequestDto;
 import java.util.List;
 
 public interface CommentAdaptor {
-    String registerComment(CommentRequestDto commentRequestDto, Long projectNum, Long taskNum, String writerId);
+    String registerComment(CommentRequestDto commentRequestDto, Long projectNum, Long taskNum,
+                           String writerId);
 
     List<Comment> getCommentList(Long projectNum, Long taskNum);
 

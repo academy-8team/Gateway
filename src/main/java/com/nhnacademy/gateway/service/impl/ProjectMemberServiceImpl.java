@@ -24,7 +24,7 @@ public class ProjectMemberServiceImpl implements ProjectMemberService {
         ProjectMember projectMember = projectMemberAdaptor.findProjectAdministrator(projectNum);
 
         if (!projectMember.getProject().getProjectNum().equals(memberNum)) {
-            throw new NotProjectAdministratorException();
+            throw new NotProjectAdministratorException("해당 프로젝트의 관리자가 아니기 때문에 접근할 수 없습니다.");
         }
     }
 

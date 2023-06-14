@@ -29,7 +29,6 @@ public class Oauth2Controller {
         HttpSession session = httpServletRequest.getSession();
         session.setAttribute("member", securityUser);
 
-
         return "redirect:/projectList";
     }
 

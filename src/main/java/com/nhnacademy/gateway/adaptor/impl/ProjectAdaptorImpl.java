@@ -27,23 +27,6 @@ public class ProjectAdaptorImpl implements ProjectAdaptor {
 
     private final DomainProperties domainProperties;
 
-//    @Override
-//    public List<Project> findProjects(int page) {
-//        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-//
-//        HttpEntity<List<Project>> httpEntity = new HttpEntity<>(headers);
-//
-//        HttpEntity<List<Project>> responds = restTemplate.exchange(
-//            domainProperties.getTaskDomain() + "/project?page={page}",
-//            HttpMethod.GET,
-//            httpEntity,
-//            new ParameterizedTypeReference<List<Project>>() {},
-//            page
-//        );
-//
-//        return responds.getBody();
-//    }
-
     @Override
     public Project makeProject(
         ProjectRequestDto projectRequestDto, Long memberNum) {

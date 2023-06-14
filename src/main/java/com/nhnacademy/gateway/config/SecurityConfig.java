@@ -81,7 +81,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
+//    @Bean
+//    public AuthenticationSuccessHandler loginSuccessHandler(
+//        RedisTemplate<String, String> redisTemplate) {
+//        return new LoginSuccessHandler(redisTemplate);
+//    }
 
     @Bean
     public AuthenticationSuccessHandler loginSuccessHandler() {
@@ -98,82 +102,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 }
-
-//import org.springframework.context.annotation.Bean;
-//        import org.springframework.context.annotation.Configuration;
-//        import org.springframework.security.authentication.AuthenticationProvider;
-//        import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-//        import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//        import org.springframework.security.core.userdetails.UserDetailsService;
-//        import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//        import org.springframework.security.crypto.password.PasswordEncoder;
-//        import org.springframework.security.web.SecurityFilterChain;
-//
-//@Configuration
-//public class SecurityConfig {
-//
-//    private final MemberAdaptor memberAdaptor;
-//
-//    public SecurityConfig(MemberAdaptor memberAdaptor) {
-//        this.memberAdaptor = memberAdaptor;
-//    }
-//
-//    @Bean
-//    public UserDetailsService customUserDetailsService() {
-//        return new CustomUserDetailsServiceImpl(memberAdaptor);
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public AuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//        authenticationProvider.setUserDetailsService(customUserDetailsService());
-//        authenticationProvider.setPasswordEncoder(passwordEncoder());
-//        return authenticationProvider;
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests(authorizeRequests -> authorizeRequests
-//                        .antMatchers("/projectList").hasAnyAuthority("ROLE_USER")
-//                        .anyRequest().authenticated()
-//                )
-//                .csrf(csrf -> csrf
-//                        .disable()
-//                )
-//                .formLogin(formLogin -> formLogin
-//                        .usernameParameter("id")
-//                        .passwordParameter("pwd")
-//                        .loginPage("/auth/login")
-//                        .loginProcessingUrl("/login")
-//                        .successHandler(loginSuccessHandler())
-//                        .permitAll()
-//                )
-//                .logout(logout -> logout
-//                        .logoutSuccessUrl("/auth/login")
-//                        .permitAll()
-//                )
-//                .sessionManagement(sessionManagement -> sessionManagement
-//                        .sessionFixation().none()
-//                )
-//                .headers(headers -> headers
-//                        .defaultsDisabled()
-//                        .frameOptions().sameOrigin()
-//                )
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
-//                        .accessDeniedPage("/error/403")
-//                );
-//        return http.build();
-//    }
-//
-//    // Make sure to have a proper implementation of LoginSuccessHandler
-//    @Bean
-//    public LoginSuccessHandler loginSuccessHandler() {
-//        return new LoginSuccessHandler();
-//    }
-//}

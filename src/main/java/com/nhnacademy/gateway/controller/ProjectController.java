@@ -30,7 +30,6 @@ public class ProjectController {
     private final TagService tagService;
     private final MilestoneService milestoneService;
 
-
     @ModelAttribute("member")
     public SecurityUser getSessionMember(HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession(true);
@@ -45,6 +44,7 @@ public class ProjectController {
     @PostMapping("/project/create")
     public String project(ProjectRequestDto projectRequestDto,
                           @ModelAttribute("member") SecurityUser member, Model model) {
+//        model.addAttribute("projectNum", member.getMemberNum());
         projectService.createProject(projectRequestDto, member.getMemberNum());
 
         return "redirect:/projectList";

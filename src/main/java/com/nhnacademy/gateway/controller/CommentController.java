@@ -37,8 +37,8 @@ public class CommentController {
 
     @GetMapping("/project/{projectNum}/task/{taskNum}/comment/{commentNum}/update")
     public String updateCommentPage(@PathVariable(value = "projectNum") Long projectNum,
-                                @PathVariable(value = "taskNum") Long taskNum,
-                                @PathVariable(value = "commentNum") Long commentNum, Model model) {
+                                    @PathVariable(value = "taskNum") Long taskNum,
+                                    @PathVariable(value = "commentNum") Long commentNum, Model model) {
         model.addAttribute("projectNum", projectNum);
         model.addAttribute("taskNum", taskNum);
         model.addAttribute("commentNum", commentNum);
@@ -48,9 +48,9 @@ public class CommentController {
 
     @PostMapping("/project/{projectNum}/task/{taskNum}/comment/{commentNum}/update")
     public String updateComment(String commentContent,
-                            @PathVariable(value = "projectNum") Long projectNum,
-                            @PathVariable(value = "taskNum") Long taskNum,
-                            @PathVariable(value = "commentNum") Long commentNum) {
+                                @PathVariable(value = "projectNum") Long projectNum,
+                                @PathVariable(value = "taskNum") Long taskNum,
+                                @PathVariable(value = "commentNum") Long commentNum) {
         String message = commentService.update(commentContent, projectNum, taskNum, commentNum);
 
         return "redirect:/project/" + projectNum + "/task/detail/" + taskNum;
@@ -58,8 +58,8 @@ public class CommentController {
 
     @GetMapping("/project/{projectNum}/task/{taskNum}/comment/{commentNum}/delete")
     public String deleteComment(@PathVariable(value = "projectNum") Long projectNum,
-                            @PathVariable(value = "taskNum") Long taskNum,
-                            @PathVariable(value = "commentNum") Long commentNum) {
+                                @PathVariable(value = "taskNum") Long taskNum,
+                                @PathVariable(value = "commentNum") Long commentNum) {
         String message = commentService.delete(projectNum, taskNum, commentNum);
 
         return "redirect:/project/" + projectNum + "/task/detail/" + taskNum;

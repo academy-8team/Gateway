@@ -24,7 +24,6 @@ public class MilestoneController {
         model.addAttribute("projectNum", projectNum);
         return "milestoneCreate";
     }
-
     @PostMapping("/project/{projectNum}/milestone/register")
     public String createTag(String milestoneTitle,
                             @PathVariable(value = "projectNum") Long projectNum) {

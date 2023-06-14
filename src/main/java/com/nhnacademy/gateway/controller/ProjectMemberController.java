@@ -42,6 +42,7 @@ public class ProjectMemberController {
     public String registerProjectMember(@PathVariable(value = "projectNum") Long projectNum,
                                         @ModelAttribute("member") SecurityUser member,
                                         Model model) {
+        //projectMemberService.checkProjectAdministrator(member.getMemberNum(), projectNum);
 
         List<Member> memberList = memberService.findAllMember();
 
