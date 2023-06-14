@@ -1,16 +1,16 @@
 package com.nhnacademy.gateway.domain;
 
-public enum MemberGrade {
-    ROLE_ADMIN {
+public enum ProjectRole {
+    PROJECT_ROLE_ADMIN {
         @Override
         public String toString() {
-            return "ROLE_ADMIN";
+            return "PROJECT_ROLE_ADMIN";
         }
-    }
-    , ROLE_USER {
+    },
+    PROJECT_ROLE_USER {
         @Override
         public String toString() {
-            return "ROLE_USER";
+            return "PROJECT_ROLE_USER";
         }
     }
 }

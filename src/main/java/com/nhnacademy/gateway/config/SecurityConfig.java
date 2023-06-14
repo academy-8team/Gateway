@@ -1,87 +1,179 @@
-/**
- * packageName :  com.nhnacademy.gateway.config
- * fileName : SecurityConfig
- * author :  ichunghui
- * date : 2023/06/13 
- * description :
- * ===========================================================
- * DATE                 AUTHOR                NOTE
- * -----------------------------------------------------------
- * 2023/06/13                ichunghui             최초 생성
- */
-
 package com.nhnacademy.gateway.config;
 
-import org.springframework.beans.factory.annotation.Value;
+
+import com.nhnacademy.gateway.auth.LoginSuccessHandler;
+import com.nhnacademy.gateway.service.impl.CustomUserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-@EnableWebSecurity(debug = true)
+//@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${spring.security.oauth2.client.registration.github.client-id}")
-    private String githubClientId;
-
-    @Value("${spring.security.oauth2.client.registration.github.client-secret}")
-    private String githubClientSecret;
-
-    @Bean
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .antMatchers("/members/register", "/", "/login").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                .clientRegistrationRepository(clientRegistrationRepository())
-                                .authorizedClientService(authorizedClientService())
-                )
-                .formLogin(formLogin ->
-                        formLogin.loginPage("/login")
-                                .failureUrl("/login-error")
-                );
+            .authorizeRequests()
+            .antMatchers("/projectList").hasAnyAuthority("ROLE_USER") // roleadin은 관리자페이지? 같은거 되게
+            .and()
+//            .requiresChannel()
+//            .antMatchers("/admin/**").requiresSecure()
+//            .antMatchers("/private-project/**").requiresSecure()
+//            .antMatchers("/project/**").requiresSecure()
+//            .anyRequest().requiresInsecure()
+//            .and()
 
-        return http.build();
+            .csrf().disable()
+
+            .formLogin()
+            .usernameParameter("id")
+            .passwordParameter("pwd")
+            .loginPage("/auth/login")
+            .loginProcessingUrl("/login")
+            .successHandler(loginSuccessHandler())
+//            .successHandler(loginSuccessHandler(null))
+            .and()
+
+            .logout()
+            .logoutSuccessUrl("/auth/login")
+            .and()
+            .sessionManagement()
+            .sessionFixation()
+            .none()
+            .and()
+            .headers()
+            .defaultsDisabled()
+            .frameOptions().sameOrigin()
+            .and()
+            .exceptionHandling()
+            .accessDeniedPage("/error/403")
+            .and();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider(null));
     }
 
     @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(githubClientRegistration());
+    public AuthenticationProvider authenticationProvider(
+        CustomUserDetailsServiceImpl customUserDetailsService) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(customUserDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        return authenticationProvider;
     }
 
     @Bean
-    public OAuth2AuthorizedClientService authorizedClientService() {
-        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository());
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
-    private ClientRegistration githubClientRegistration() {
-        return ClientRegistration.withRegistrationId("github")
-                .clientId(githubClientId)
-                .clientSecret(githubClientSecret)
-                .tokenUri("https://github.com/login/oauth/access_token")
-                .authorizationUri("https://github.com/login/oauth/authorize")
-                .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}")
-                .scope("read:user")
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
-                .userInfoUri("https://api.github.com/user")
-                .userNameAttributeName("id")
-                .clientName("GitHub")
-                .build();
+
+
+    @Bean
+    public AuthenticationSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler();
     }
+
+
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+
 }
 
+//import org.springframework.context.annotation.Bean;
+//        import org.springframework.context.annotation.Configuration;
+//        import org.springframework.security.authentication.AuthenticationProvider;
+//        import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+//        import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//        import org.springframework.security.core.userdetails.UserDetailsService;
+//        import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//        import org.springframework.security.crypto.password.PasswordEncoder;
+//        import org.springframework.security.web.SecurityFilterChain;
+//
+//@Configuration
+//public class SecurityConfig {
+//
+//    private final MemberAdaptor memberAdaptor;
+//
+//    public SecurityConfig(MemberAdaptor memberAdaptor) {
+//        this.memberAdaptor = memberAdaptor;
+//    }
+//
+//    @Bean
+//    public UserDetailsService customUserDetailsService() {
+//        return new CustomUserDetailsServiceImpl(memberAdaptor);
+//    }
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+//        authenticationProvider.setUserDetailsService(customUserDetailsService());
+//        authenticationProvider.setPasswordEncoder(passwordEncoder());
+//        return authenticationProvider;
+//    }
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeRequests(authorizeRequests -> authorizeRequests
+//                        .antMatchers("/projectList").hasAnyAuthority("ROLE_USER")
+//                        .anyRequest().authenticated()
+//                )
+//                .csrf(csrf -> csrf
+//                        .disable()
+//                )
+//                .formLogin(formLogin -> formLogin
+//                        .usernameParameter("id")
+//                        .passwordParameter("pwd")
+//                        .loginPage("/auth/login")
+//                        .loginProcessingUrl("/login")
+//                        .successHandler(loginSuccessHandler())
+//                        .permitAll()
+//                )
+//                .logout(logout -> logout
+//                        .logoutSuccessUrl("/auth/login")
+//                        .permitAll()
+//                )
+//                .sessionManagement(sessionManagement -> sessionManagement
+//                        .sessionFixation().none()
+//                )
+//                .headers(headers -> headers
+//                        .defaultsDisabled()
+//                        .frameOptions().sameOrigin()
+//                )
+//                .exceptionHandling(exceptionHandling -> exceptionHandling
+//                        .accessDeniedPage("/error/403")
+//                );
+//        return http.build();
+//    }
+//
+//    // Make sure to have a proper implementation of LoginSuccessHandler
+//    @Bean
+//    public LoginSuccessHandler loginSuccessHandler() {
+//        return new LoginSuccessHandler();
+//    }
+//}

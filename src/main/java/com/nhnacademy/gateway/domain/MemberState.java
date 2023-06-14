@@ -1,6 +1,6 @@
 package com.nhnacademy.gateway.domain;
 
-public enum MemberStatus {
+public enum MemberState {
     MEMBER_MEMBERSHIP {
         @Override
         public String toString() {

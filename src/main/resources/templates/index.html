@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>홈페이지</title>
     <meta charset="UTF-8">
+    <title>시작 페이지</title>
 </head>
 <body>
-
-<h1>환영합니다!</h1>
-
-<p><a th:href="@{/members/register}">회원 가입</a></p>
-
+증명서 <br>
+<a href="/projectList" class="btn btn-primary pull-right" role="button">주민 목록으로</a>
+<a href="/register">회원가입하기</a>
+<a href="/logout">로그아웃하기</a>
 </body>
 </html>

@@ -1,51 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
-    <title>회원 가입</title>
-    <meta charset="UTF-8">
+    <meta charset=utf-8 http-equiv="Content-Type" content="text/html;">
+    <title>회원가입</title>
 </head>
 <body>
-
-<h2>회원 가입</h2>
-
-<form th:action="@{/members}" method="post">
-    <table>
-        <tr>
-            <td>ID:</td>
-            <td><input type="text" th:name="memberId"/></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type="password" th:name="memberPassword"/></td>
-        </tr>
-        <tr>
-            <td>Email:</td>
-            <td><input type="email" th:name="memberEmail"/></td>
-        </tr>
-        <tr>
-            <td>Member Grade:</td>
-            <td>
-                <select th:name="memberGrade">
-                    <option value="ROLE_ADMIN">Admin</option>
-                    <option value="ROLE_USER" selected>User</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>Member Status:</td>
-            <td>
-                <select th:name="memberStatus">
-                    <option value="MEMBER_MEMBERSHIP" selected>Membership</option>
-                    <option value="MEMBER_WITHDRAW">Withdraw</option>
-                    <option value="MEMBER_DORMANT">Dormant</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"><button type="submit">회원 가입</button></td>
-        </tr>
-    </table>
+<form method="post" action="/register">
+    ID: <input type="text" name="memberId" /><br />
+    Password: <input type="password" name="memberPassword" /><br />
+    Email:<input type="email" name="memberEmail" /><br />
+    <input type="submit" value="회원가입">
 </form>
 
+<h2>깃허브로 로그인하기</h2>
+<a href="https://github.com/login/oauth/authorize?client_id=f9b552f9759ac22ab7d9&redirect_uri=http://localhost:8080/login/oauth2/code/github" class="btn btn-primary pull-right" role="button">깃허브로 로그인</a>
 </body>
+
+<script>
+    let errorMessage = "[[${error}]]"
+
+    window.onload = function() {
+        if (errorMessage !== "") {
+            alert(errorMessage);
+        }
+    }
+</script>
 </html>
